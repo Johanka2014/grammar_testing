@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Practice: "in case" vs "just in case"</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #eef2ff; /* A very light blue background */
+        }
+        .activity-card {
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s;
+        }
+        .activity-card:hover {
+            transform: translateY(-5px);
+        }
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.3s, box-shadow 0.3s;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .btn-primary {
+            background-color: #2563eb; /* A strong blue */
+            color: white;
+        }
+        .btn-primary:hover {
+            background-color: #1d4ed8; /* A darker blue */
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+        }
+        .btn-secondary {
+            background-color: #64748b; /* A neutral gray-blue */
+            color: white;
+        }
+        .btn-secondary:hover {
+            background-color: #475569;
+        }
+        .feedback {
+            padding: 0.75rem 1rem;
+            border-radius: 8px;
+            margin-top: 1rem;
+            font-weight: 500;
+        }
+        .feedback-correct {
+            background-color: #dcfce7; /* Light green */
+            color: #166534; /* Dark green */
+            border-left: 4px solid #22c55e;
+        }
+        .feedback-incorrect {
+            background-color: #fee2e2; /* Light red */
+            color: #991b1b; /* Dark red */
+            border-left: 4px solid #ef4444;
+        }
+        .radio-label {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            border: 2px solid #cbd5e1;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        input[type="radio"]:checked + .radio-label {
+            background-color: #dbeafe; /* Light blue when selected */
+            border-color: #2563eb;
+            color: #1e40af;
+        }
+         /* Hide the actual radio button */
+        input[type="radio"] {
+            display: none;
+        }
+    </style>
+</head>
+<body class="antialiased text-slate-800">
+
+    <div class="container mx-auto p-4 sm:p-6 lg:p-8">
+
+        <!-- Header -->
+        <header class="text-center mb-10">
+            <h1 class="text-3xl sm:text-4xl font-bold text-slate-900">Practice Exercises</h1>
+            <p class="mt-2 text-lg text-slate-600">Mastering "in case" and "just in case"</p>
+        </header>
+
+        <!-- Explanation Box -->
+        <div class="max-w-3xl mx-auto bg-blue-100 border-l-4 border-blue-500 text-blue-800 p-4 rounded-r-lg mb-10 shadow-sm">
+            <h3 class="font-bold">Quick Tip</h3>
+            <p class="mt-1">
+                <strong>In case:</strong> Used for precautions against something that might happen. It's about being prepared for a possibility. (e.g., "Take an umbrella in case it rains.")
+            </p>
+             <p class="mt-2">
+                <strong>Just in case:</strong> Often used more informally at the end of a sentence. It implies a smaller, less likely possibility, or a more general precaution. (e.g., "I'll take a snack, just in case.")
+            </p>
+        </div>
+
+
+        <!-- Activity 1: Fill in the Blanks -->
+        <div id="activity1" class="activity-card max-w-3xl mx-auto p-6 sm:p-8 mb-8">
+            <h2 class="text-2xl font-bold text-slate-900 mb-4">Activity 1: Choose the Best Phrase</h2>
+            <p class="text-slate-600 mb-6">Complete the sentence by selecting the correct phrase.</p>
+            <div id="fill-in-blank-question-container">
+                <!-- Question will be loaded here by JavaScript -->
+            </div>
+            <div id="fill-in-blank-feedback" class="mt-4"></div>
+            <div class="flex justify-end mt-6">
+                <button id="next-fill-in-blank" class="btn btn-secondary">Next &rarr;</button>
+            </div>
+        </div>
+
+        <!-- Activity 2: Sentence Builder -->
+        <div id="activity2" class="activity-card max-w-3xl mx-auto p-6 sm:p-8">
+            <h2 class="text-2xl font-bold text-slate-900 mb-4">Activity 2: Sentence Builder</h2>
+            <p class="text-slate-600 mb-6">Combine the two ideas into one sentence using "in case" or "just in case".</p>
+            <div id="sentence-builder-container">
+                <!-- Question will be loaded here by JavaScript -->
+            </div>
+            <div class="mt-4">
+                <input type="text" id="sentence-builder-input" class="w-full p-3 border-2 border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition" placeholder="Type your sentence here...">
+            </div>
+            <div id="sentence-builder-feedback" class="mt-4"></div>
+             <div class="flex justify-between items-center mt-6">
+                 <button id="show-answer-btn" class="btn btn-secondary">Show Answer</button>
+                <button id="next-sentence-builder" class="btn btn-primary">Check & Next &rarr;</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- DATA ---
+            const fillInTheBlanks = [
+                {
+                    sentence: "I wrote down her address ___ I forgot it.",
+                    correctAnswer: "in case",
+                    explanation: "'in case' is used here to explain the reason for the precaution (writing down the address)."
+                },
+                {
+                    sentence: "You should take some water with you ___ you get thirsty.",
+                    correctAnswer: "in case",
+                    explanation: "The precaution (taking water) is directly linked to the possibility of getting thirsty."
+                },
+                {
+                    sentence: "I'll pack an extra shirt, ___ .",
+                    correctAnswer: "just in case",
+                    explanation: "'just in case' is a general precaution added at the end, not tied to a specific 'if' clause in the sentence."
+                },
+                {
+                    sentence: "Here's my phone number ___ you need to contact me.",
+                    correctAnswer: "in case",
+                    explanation: "'in case' connects the action (giving the number) with the potential need (contacting me)."
+                },
+                {
+                    sentence: "The meeting might finish early, but I'll bring a book to read, ___ .",
+                    correctAnswer: "just in case",
+                    explanation: "This is a general backup plan. The phrase stands alone at the end, making 'just in case' the more natural choice."
+                },
+            ];
+
+            const sentenceBuilders = [
+                {
+                    part1: "Charge your phone now.",
+                    part2: "The power might go out later.",
+                    correctPattern: "charge your phone now in case the power goes out later"
+                },
+                {
+                    part1: "I'll make some extra food.",
+                    part2: "More guests might arrive.",
+                    correctPattern: "i'll make some extra food in case more guests arrive"
+                },
+                {
+                    part1: "Keep a copy of the file on your USB drive.",
+                    part2: "The computer might crash.",
+                    correctPattern: "keep a copy of the file on your usb drive in case the computer crashes"
+                },
+                {
+                    part1: "Let's leave a little earlier for the airport.",
+                    part2: "There might be traffic.",
+                    correctPattern: "let's leave a little earlier for the airport in case there is traffic"
+                },
+                {
+                    part1: "Check the weather forecast.",
+                    part2: "It might snow tonight.",
+                    correctPattern: "check the weather forecast in case it snows tonight"
+                }
+            ];
+
+            let currentFillBlankIndex = 0;
+            let currentSentenceBuilderIndex = 0;
+
+            // --- DOM Elements ---
+            const fillBlankContainer = document.getElementById('fill-in-blank-question-container');
+            const fillBlankFeedback = document.getElementById('fill-in-blank-feedback');
+            const nextFillBlankBtn = document.getElementById('next-fill-in-blank');
+
+            const sentenceBuilderContainer = document.getElementById('sentence-builder-container');
+            const sentenceBuilderInput = document.getElementById('sentence-builder-input');
+            const sentenceBuilderFeedback = document.getElementById('sentence-builder-feedback');
+            const nextSentenceBuilderBtn = document.getElementById('next-sentence-builder');
+            const showAnswerBtn = document.getElementById('show-answer-btn');
+
+            // --- FUNCTIONS ---
+
+            // --- Activity 1: Fill in the Blanks ---
+            function loadFillBlankQuestion() {
+                const q = fillInTheBlanks[currentFillBlankIndex];
+                const parts = q.sentence.split('___');
+                fillBlankContainer.innerHTML = `
+                    <p class="text-lg sm:text-xl text-slate-800">
+                        ${parts[0]}
+                        <span class="inline-block bg-slate-200 px-4 py-1 rounded-md text-slate-200">...</span>
+                        ${parts[1]}
+                    </p>
+                    <div class="flex gap-4 mt-6">
+                        <div>
+                            <input type="radio" id="option_in_case" name="phrase" value="in case">
+                            <label for="option_in_case" class="radio-label">in case</label>
+                        </div>
+                        <div>
+                            <input type="radio" id="option_just_in_case" name="phrase" value="just in case">
+                            <label for="option_just_in_case" class="radio-label">just in case</label>
+                        </div>
+                    </div>
+                `;
+                fillBlankFeedback.innerHTML = '';
+                fillBlankContainer.querySelectorAll('input[name="phrase"]').forEach(radio => {
+                    radio.addEventListener('change', checkFillBlankAnswer);
+                });
+            }
+
+            function checkFillBlankAnswer(event) {
+                const selected = event.target.value;
+                const q = fillInTheBlanks[currentFillBlankIndex];
+                if (selected === q.correctAnswer) {
+                    fillBlankFeedback.innerHTML = `<div class="feedback feedback-correct"><strong>Correct!</strong> ${q.explanation}</div>`;
+                } else {
+                    fillBlankFeedback.innerHTML = `<div class="feedback feedback-incorrect"><strong>Not quite.</strong> The better answer is '${q.correctAnswer}'. ${q.explanation}</div>`;
+                }
+                // Disable radios after answering
+                fillBlankContainer.querySelectorAll('input[name="phrase"]').forEach(radio => radio.disabled = true);
+            }
+
+            nextFillBlankBtn.addEventListener('click', () => {
+                currentFillBlankIndex = (currentFillBlankIndex + 1) % fillInTheBlanks.length;
+                loadFillBlankQuestion();
+            });
+
+            // --- Activity 2: Sentence Builder ---
+            function loadSentenceBuilderQuestion() {
+                const q = sentenceBuilders[currentSentenceBuilderIndex];
+                sentenceBuilderContainer.innerHTML = `
+                    <div class="space-y-3">
+                        <p class="text-slate-700"><strong class="font-semibold text-slate-900">Idea 1:</strong> ${q.part1}</p>
+                        <p class="text-slate-700"><strong class="font-semibold text-slate-900">Idea 2:</strong> ${q.part2}</p>
+                    </div>
+                `;
+                sentenceBuilderInput.value = '';
+                sentenceBuilderFeedback.innerHTML = '';
+                sentenceBuilderInput.disabled = false;
+                showAnswerBtn.style.display = 'inline-flex';
+            }
+            
+            function checkSentenceBuilderAnswer() {
+                const userInput = sentenceBuilderInput.value.trim().toLowerCase().replace(/[.,]/g, '');
+                const q = sentenceBuilders[currentSentenceBuilderIndex];
+
+                if (userInput.includes(q.correctPattern)) {
+                    sentenceBuilderFeedback.innerHTML = `<div class="feedback feedback-correct"><strong>Excellent!</strong> That's a perfect way to combine the ideas.</div>`;
+                    sentenceBuilderInput.disabled = true;
+                    showAnswerBtn.style.display = 'none';
+                    return true;
+                } else if (userInput === '') {
+                    sentenceBuilderFeedback.innerHTML = `<div class="feedback feedback-incorrect">Please type your answer in the box.</div>`;
+                    return false;
+                }
+                else {
+                    sentenceBuilderFeedback.innerHTML = `<div class="feedback feedback-incorrect"><strong>That's not quite right.</strong> Try to form a sentence like: "${q.part1} <strong>in case</strong> ${q.part2.toLowerCase().replace(/[.,]/g, '')}."</div>`;
+                    return false;
+                }
+            }
+            
+            showAnswerBtn.addEventListener('click', () => {
+                const q = sentenceBuilders[currentSentenceBuilderIndex];
+                 sentenceBuilderFeedback.innerHTML = `<div class="feedback feedback-correct"><strong>Example Answer:</strong> ${q.part1} <strong>in case</strong> ${q.part2.toLowerCase().replace(/[.,]/g, '')}.</div>`;
+            });
+
+            nextSentenceBuilderBtn.addEventListener('click', () => {
+                if(checkSentenceBuilderAnswer()){
+                    setTimeout(() => {
+                        currentSentenceBuilderIndex = (currentSentenceBuilderIndex + 1) % sentenceBuilders.length;
+                        loadSentenceBuilderQuestion();
+                    }, 1500); // Wait a bit before loading the next one
+                }
+            });
+
+
+            // --- Initial Load ---
+            loadFillBlankQuestion();
+            loadSentenceBuilderQuestion();
+        });
+    </script>
+
+</body>
+</html>
